@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Universal AI Career Architect</title>
+<style>
+:root{--bg:#090d16;--card:#131b2e;--accent:#38bdf8;--accent-glow:rgba(56,189,248,.3);--green:#22c55e;--text:#f1f5f9;--text-muted:#94a3b8;--border:rgba(255,255,255,.1)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+header{width:100%;padding:15px 20px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+h1{margin:0;color:var(--accent);font-size:1.4rem}
+.nav-tabs{display:flex;gap:10px;margin:15px 0;flex-wrap:wrap;justify-content:center}
+.tab-btn{padding:10px 18px;background:var(--card);border:1px solid var(--border);color:var(--text-muted);border-radius:8px;cursor:pointer;font-weight:bold;transition:.2s}
+.tab-btn.active{background:var(--accent);color:#000;border-color:var(--accent);box-shadow:0 0 12px var(--accent-glow)}
+.main-container{width:95%;max-width:1200px;margin-bottom:40px}
+.tab-content{display:none}.tab-content.active{display:block}
+.card{background:var(--card);border-radius:12px;padding:20px;border:1px solid var(--border)}
+.avatar-box{display:flex;align-items:center;gap:15px;background:rgba(255,255,255,.03);padding:15px;border-radius:10px;margin:15px 0}
+.avatar{width:50px;height:50px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+.ai-speech{font-size:1rem;color:#e2e8f0;font-weight:500}
+.btn-primary{padding:10px 18px;background:var(--accent);color:#000;border:none;border-radius:6px;font-weight:bold;cursor:pointer}
+.builder-layout{display:flex;gap:20px}.form-side{width:45%}.preview-side{width:55%;background:#334155;padding:20px;border-radius:8px;display:flex;justify-content:center;overflow-x:auto}
+.resume-sheet{width:210mm;min-height:297mm;background:#fff;color:#1e293b;padding:20mm 15mm;box-shadow:0 10px 25px rgba(0,0,0,.3);font-family:Georgia,serif;font-size:10pt;line-height:1.4}
+.form-group{margin-bottom:12px}label{display:block;font-size:.8rem;color:var(--text-muted);margin-bottom:4px}
+input,select,textarea{width:100%;padding:8px 12px;background:#0f172a;border:1px solid var(--border);color:#fff;border-radius:6px;font-family:inherit}
+textarea{height:60px;resize:vertical}
+.res-header{text-align:center;border-bottom:2px solid #0284c7;padding-bottom:10px;margin-bottom:12px}
+.res-name{font-size:20pt;font-weight:bold;color:#0f172a;text-transform:uppercase}.res-title{font-size:10pt;color:#0284c7;font-weight:bold;margin-top:3px;font-family:sans-serif}.res-contact{font-size:8.5pt;color:#64748b;margin-top:4px;font-family:sans-serif}
+.res-section{margin-bottom:12px}.res-sec-title{font-size:10pt;font-weight:bold;color:#0284c7;border-bottom:1px solid #cbd5e1;padding-bottom:2px;margin-bottom:6px;text-transform:uppercase;font-family:sans-serif}
+@media(max-width:850px){.builder-layout{flex-direction:column}.form-side,.preview-side{width:100%}.resume-sheet{transform-origin:top center}}
+@media print{body{background:#fff}header,.nav-tabs,.form-side{display:none!important}.main-container{width:100%;margin:0}.builder-layout{display:block}.preview-side{width:100%;padding:0;background:#fff}.resume-sheet{box-shadow:none;width:100%}}
+</style>
+</head>
+<body>
+
+<header>
+<h1>UNIVERSAL AI CAREER ARCHITECT</h1>
+<button class="btn-primary" onclick="window.print()">📄 Export / Download PDF</button>
+</header>
+
+<div class="nav-tabs">
+<button class="tab-btn active" onclick="switchTab('resume',this)">📄 Resume Builder</button>
+<button class="tab-btn" onclick="switchTab('interview',this)">🎙️ AI Interview</button>
+<button class="tab-btn" onclick="switchTab('ats',this)">🔍 ATS Scanner</button>
+<button class="tab-btn" onclick="switchTab('roadmap',this)">📈 Career Roadmap</button>
+</div>
+
+<div class="main-container">
+
+<div id="tab-resume" class="tab-content active">
+<div class="builder-layout">
+<div class="form-side card">
+<h3>Select Profession / Domain</h3>
+<div class="form-group"><select id="domainSelect" onchange="updateDomainFields()">
+<option value="chef">Culinary & Chef (Master Chef, Baker, Cook)</option>
+<option value="doctor">Healthcare & Medical (Doctor, Nurse, Surgeon)</option>
+<option value="tech">Software & IT (Developer, Engineer, QA)</option>
+<option value="creative">Creative & Design (UI/UX, Graphic Designer, Editor)</option>
+<option value="education">Education & Academic (Teacher, Professor)</option>
+<option value="corporate">Business & Finance (CA, Analyst, Manager)</option>
+</select></div>
+
+<h3>Personal Details</h3>
+<div class="form-group"><label>Full Name:</label><input id="inName" value="Harsh Vardhan" oninput="renderResume()"></div>
+<div class="form-group"><label>Job Title:</label><input id="inTitle" value="Executive Chef / Culinary Specialist" oninput="renderResume()"></div>
+<div class="form-group"><label>Contact Info:</label><input id="inContact" value="harsh@email.com | +91 98765 43210 | New Delhi" oninput="renderResume()"></div>
+<div class="form-group"><label>Summary:</label><textarea id="inSummary" oninput="renderResume()">Experienced professional with strong practical expertise, operational efficiency, and a track record of high-performance output.</textarea></div>
+
+<h3>Domain Specific Attributes</h3>
+<div id="dynamicFieldsContainer"></div>
+
+<h3>Experience / Projects</h3>
+<div class="form-group"><label>Role / Position & Organization:</label><input id="inExpRole" value="Lead Specialist - Prime Operations" oninput="renderResume()"></div>
+<div class="form-group"><label>Duration:</label><input id="inExpDate" value="2022 - Present" oninput="renderResume()"></div>
+<div class="form-group"><label>Key Achievements (One per line):</label><textarea id="inExpDesc" oninput="renderResume()">• Managed core team operations and improved workflow by 25%.
+• Implemented quality standards resulting in zero compliance errors.
+• Trained 10+ junior team members on industry best practices.</textarea></div>
+</div>
+
+<div class="preview-side"><div class="resume-sheet" id="resumeSheet"></div></div>
+</div>
+</div>
+
+<div id="tab-interview" class="tab-content card">
+<h2>AI Voice Mock Interviewer</h2>
+<p style="color:var(--text-muted)">Select job role and click Start Interview. The AI will speak questions aloud.</p>
+<label>Target Role:</label>
+<select id="role-select" style="margin-bottom:15px">
+<option value="hr">General HR Round (All Fields)</option>
+<option value="software">Software Developer / SDE</option>
+<option value="medical">Medical / Healthcare Round</option>
+<option value="hospitality">Hospitality & Culinary Round</option>
+</select>
+<div class="avatar-box"><div class="avatar">🤖</div><div><div style="font-size:.8rem;color:var(--text-muted)">AI INTERVIEWER</div><div class="ai-speech" id="ai-question">Press "Start / Next Question" to begin.</div></div></div>
+<div style="background:#0f172a;padding:12px;border-radius:8px;min-height:50px;border:1px solid var(--border);margin-bottom:15px">
+<small style="color:var(--text-muted)">Your Answer (Voice Recognized):</small>
+<div id="user-transcript" style="margin-top:5px;color:var(--accent)">Click 'Speak Answer' and speak into your microphone...</div>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="btn-primary" onclick="nextQuestion()">▶️ Start / Next Question</button>
+<button class="btn-primary" style="background:var(--green)" onclick="startListening()">🎤 Speak Answer</button>
+</div>
+<div id="interview-feedback" style="margin-top:15px;color:var(--text-muted)"></div>
+</div>
+
+<div id="tab-ats" class="tab-content card">
+<h2>ATS Keyword & Skill Evaluator</h2>
+<p style="color:var(--text-muted)">Paste your resume text to evaluate keyword optimization.</p>
+<textarea id="resume-text" style="height:150px" placeholder="Paste resume content here..."></textarea>
+<button class="btn-primary" style="margin-top:15px" onclick="analyzeResume()">🔍 Analyze ATS Score</button>
+<div id="ats-result" style="display:none;margin-top:20px">
+<div style="font-size:2rem;font-weight:bold;color:var(--green)" id="ats-score">0 / 100</div>
+<ul id="ats-feedback" style="margin-top:10px;color:var(--text-muted)"></ul>
+</div>
+</div>
+
+<div id="tab-roadmap" class="tab-content card">
+<h2>Career Track Salary Insights & Roadmap</h2>
+<select id="track-select" onchange="updateRoadmap()" style="margin-bottom:15px">
+<option value="tech">Tech & Software Engineering</option>
+<option value="medical">Healthcare & Medical Professionals</option>
+<option value="culinary">Culinary & Hospitality</option>
+</select>
+<div id="roadmap-content"></div>
+</div>
+
+</div>
+
+<script>
+const domainConfigs={
+chef:{title:"Executive Chef / Culinary Specialist",labels:["Cuisines & Culinary Specializations:","Food Safety & Certifications:","Kitchen Management Tools:"],vals:["North Indian, Italian Fusion, Continental, Pastry & Baking","FSSAI Food Safety, HACCP Standards, First Aid","POS Systems, Cost Control, Inventory Software"]},
+doctor:{title:"Medical / Healthcare Professional",labels:["Clinical Competencies:","Registration / Certifications:","Clinical Specializations:"],vals:["Patient Care, Diagnostics, Emergency Protocols","Professional Registration, BLS / First Aid","General Medicine, Pediatrics, Emergency Care"]},
+tech:{title:"Software Development Engineer",labels:["Programming Languages & Frameworks:","Developer Tools & Platforms:","Core CS Fundamentals:"],vals:["Java, Python, JavaScript, React, Node.js, SQL","Git, GitHub, Docker, Postman, AWS","DSA, DBMS, OOPs, Computer Networks"]},
+creative:{title:"UI/UX & Visual Designer",labels:["Design Tools & Software:","Portfolio Links:","Creative Skills:"],vals:["Figma, Adobe XD, Photoshop, Illustrator, After Effects","Behance / Dribbble / Personal Portfolio","Wireframing, User Research, Prototyping, Branding"]},
+education:{title:"Teacher / Academic Faculty",labels:["Subject Specialization:","Educational Qualifications:","Teaching Methodology & Tools:"],vals:["Mathematics, Science, English, CBSE / ICSE","B.Ed / Relevant Degree / Eligibility","Lesson Planning, Smart Classroom, Student Counseling"]},
+corporate:{title:"Financial Analyst / Business Professional",labels:["Financial & Business Skills:","Certifications:","Software Tools:"],vals:["Financial Modeling, Budgeting, GST, Business Analysis","CA / CFA / MBA / Relevant Credentials","Excel, Power BI, SAP, Tally, CRM"]}
+};
+
+function switchTab(id,btn){
+document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+document.getElementById('tab-'+id).classList.add('active');
+btn.classList.add('active');
+if(id==='roadmap')updateRoadmap();
+}
+
+function updateDomainFields(){
+const c=domainConfigs[document.getElementById('domainSelect').value];
+document.getElementById('inTitle').placeholder=c.title;
+document.getElementById('dynamicFieldsContainer').innerHTML=c.labels.map((label,i)=>`<div class="form-group"><label>${label}</label><input id="dynVal${i+1}" value="${c.vals[i]}" oninput="renderResume()"></div>`).join('');
+renderResume();
+}
+
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+
+function renderResume(){
+const name=esc(document.getElementById('inName').value||'YOUR NAME');
+const title=esc(document.getElementById('inTitle').value||'PROFESSIONAL TITLE');
+const contact=esc(document.getElementById('inContact').value||'email@example.com | +91 0000000000');
+const summary=esc(document.getElementById('inSummary').value||'');
+const domain=document.getElementById('domainSelect').value,c=domainConfigs[domain];
+const vals=[1,2,3].map(i=>esc(document.getElementById('dynVal'+i)?.value||''));
+const role=esc(document.getElementById('inExpRole').value||'');
+const date=esc(document.getElementById('inExpDate').value||'');
+const desc=document.getElementById('inExpDesc').value.split('\n').filter(Boolean).map(x=>`<li>${esc(x.replace(/^[•\-]\s*/,''))}</li>`).join('');
+document.getElementById('resumeSheet').innerHTML=`
+<div class="res-header"><div class="res-name">${name}</div><div class="res-title">${title}</div><div class="res-contact">${contact}</div></div>
+${summary?`<div class="res-section"><div class="res-sec-title">Professional Overview</div><div>${summary}</div></div>`:''}
+<div class="res-section"><div class="res-sec-title">Domain Expertise & Skills</div><div>
+<div><strong>${esc(c.labels[0])}</strong> ${vals[0]}</div>
+<div><strong>${esc(c.labels[1])}</strong> ${vals[1]}</div>
+<div><strong>${esc(c.labels[2])}</strong> ${vals[2]}</div>
+</div></div>
+<div class="res-section"><div class="res-sec-title">Experience / Projects</div>
+<div style="display:flex;justify-content:space-between;font-weight:bold"><span>${role}</span><span>${date}</span></div>
+<ul style="margin:6px 0 0 18px;padding:0">${desc}</ul></div>`;
+}
+
+const questions={
+hr:["Tell me about yourself and your background.","Why should we hire you?","Where do you see yourself in three years?","Tell me about a challenge you handled successfully."],
+software:["Explain OOP concepts with a real-world example.","What is the difference between SQL and NoSQL?","Explain one project you have built.","How do you improve algorithm time complexity?"],
+medical:["Tell me about your clinical or healthcare background.","How do you handle a difficult patient or stressful situation?","How do you maintain patient safety?"],
+hospitality:["Tell me about your culinary or hospitality experience.","How do you handle pressure during peak service?","How do you maintain quality and hygiene standards?"]
+};
+let qIndex=0;
+function speakText(t){if('speechSynthesis' in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t))}}
+function nextQuestion(){
+const list=questions[document.getElementById('role-select').value];
+if(qIndex>=list.length)qIndex=0;
+const q=list[qIndex++];
+document.getElementById('ai-question').textContent=q;
+document.getElementById('user-transcript').textContent="Click 'Speak Answer' and speak into your microphone...";
+document.getElementById('interview-feedback').textContent='';
+speakText(q);
+}
+function startListening(){
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(!SR){alert('Speech Recognition is not supported. Please use Google Chrome or Microsoft Edge.');return}
+const r=new SR();r.lang='en-IN';r.interimResults=false;
+document.getElementById('user-transcript').textContent='Listening... Speak clearly now.';
+r.onresult=e=>{const t=e.results[0][0].transcript;document.getElementById('user-transcript').textContent='"'+t+'"';evaluateAnswer(t)};
+r.onerror=()=>document.getElementById('user-transcript').textContent='Mic error or speech not detected. Please try again.';
+r.start();
+}
+function evaluateAnswer(t){
+const n=t.trim().split(/\s+/).filter(Boolean).length;
+let f=n<10?'⚠️ Answer is too short. Add context, actions and a result.':n>35?'✅ Good detailed answer. Keep it structured and confident.':'👍 Good concise answer. Add one specific example to make it stronger.';
+document.getElementById('interview-feedback').textContent='AI Evaluation: '+f;
+}
+
+function analyzeResume(){
+const text=document.getElementById('resume-text').value.toLowerCase();
+if(text.trim().length<30){alert('Please paste more complete resume content.');return}
+const keywords=['communication','leadership','project','skills','experience','education','team','achieved','developed','linkedin','github'];
+const found=keywords.filter(k=>text.includes(k)),missing=keywords.filter(k=>!text.includes(k));
+const score=Math.round(found.length/keywords.length*100);
+document.getElementById('ats-score').textContent=score+' / 100';
+document.getElementById('ats-feedback').innerHTML=(missing.length?`<li><strong>Consider adding:</strong> ${missing.join(', ')}</li>`:'<li>Great keyword coverage across the basic ATS checks.</li>')+
+(!text.includes('github')&&!text.includes('linkedin')?'<li>Add relevant professional profile links if available.</li>':'')+
+(!text.includes('achieved')&&!text.includes('developed')?'<li>Use measurable action verbs such as Developed, Managed, Optimized and Achieved.</li>':'');
+document.getElementById('ats-result').style.display='block';
+}
+
+function updateRoadmap(){
+const v=document.getElementById('track-select').value;
+const data={
+tech:['₹4 LPA - ₹12+ LPA','Master one programming language, DSA, SQL, Git and build 2-3 strong projects.','Practice interviews and improve system-design fundamentals as you progress.'],
+medical:['Varies by qualification, specialization and experience','Build clinical knowledge, practical exposure, certifications and communication skills.','Maintain relevant registration and follow professional requirements.'],
+culinary:['Varies by role, city, hotel and experience','Strengthen food safety, kitchen operations, menu skills and team management.','Build a portfolio of dishes, experience and measurable achievements.']
+}[v];
+document.getElementById('roadmap-content').innerHTML=`<div style="background:rgba(56,189,248,.1);padding:15px;border-radius:8px"><strong>Indicative Range:</strong> ${data[0]}</div><h4>Preparation Roadmap</h4><ul><li>${data[1]}</li><li>${data[2]}</li></ul><p style="color:var(--text-muted);font-size:.85rem">Salary figures are indicative and can vary significantly by employer, location, qualification and experience.</p>`;
+}
+
+updateDomainFields();
+updateRoadmap();
+</script>
+</body>
+</html>
